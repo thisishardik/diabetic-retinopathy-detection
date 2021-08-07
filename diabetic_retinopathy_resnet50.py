@@ -71,7 +71,7 @@ def create_gen():
         shuffle=True,
         seed=0,
         subset='training',
-        rotation_range=30,  # Uncomment to use data augmentation
+        rotation_range=30,
         zoom_range=0.15,
         width_shift_range=0.2,
         height_shift_range=0.2,
@@ -91,7 +91,7 @@ def create_gen():
         shuffle=True,
         seed=0,
         subset='validation',
-        rotation_range=30,  # Uncomment to use data augmentation
+        rotation_range=30,
         zoom_range=0.15,
         width_shift_range=0.2,
         height_shift_range=0.2,
@@ -126,14 +126,18 @@ def get_model(model):
     inputs = pretrained_model.input
 
     x = tf.keras.layers.Dense(128, activation='relu')(pretrained_model.output)
-    x = tf.keras.layers.Dense(128, activation='relu')(x)
+    x = tf.keras.layers.Dropout(0.5)(x)
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.Dense(64, activation='relu')(x)
+    x = tf.keras.layers.Dropout(0.5)(x)
+    x = tf.keras.layers.BatchNormalization()(x)
 
     outputs = tf.keras.layers.Dense(5, activation='softmax')(x)
 
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
 
     model.compile(
-        optimizer='adam',
+        Adamax(lr=0.001),
         loss='categorical_crossentropy',
         metrics=['accuracy']
     )
@@ -158,6 +162,7 @@ pretrained_model.trainable = False
 
 
 def lr_rate(epoch, lr):
+    print(f"Leaning rate for {epoch} epoch is {lr}")
     if epoch < 10:
         lr = 0.0001
         return lr
@@ -187,7 +192,7 @@ outputs = tf.keras.layers.Dense(5, activation='softmax')(x)
 model = tf.keras.Model(inputs=inputs, outputs=outputs)
 
 model.compile(
-    optimizer='adam',
+    Adamax(lr=0.001),
     loss='categorical_crossentropy',
     metrics=['acc', 'AUC']
 )
@@ -251,12 +256,11 @@ results = model.evaluate(test_images, verbose=0)
 pred = model.predict(test_images)
 pred = np.argmax(pred, axis=1)
 
-# Map the label
 labels = (train_images.class_indices)
 labels = dict((v, k) for k, v in labels.items())
 pred = [labels[k] for k in pred]
 
-# Display the result
+print("Displaying results")
 print(f'The first 5 predictions: {pred[:5]}')
 
 y_test = list(test_df.Label)
@@ -306,3 +310,7 @@ def plot_confusion_matrix(cm,
     plt.ylabel('True label')
 
     plt.show()
+
+
+plot_confusion_matrix(confusion_matrix(y_test, pred),
+                      list(test_images.class_indices.keys()))
