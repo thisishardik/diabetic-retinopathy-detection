@@ -1,6 +1,6 @@
 # Automatic Screening and Staging of Multi-Stage Diabetic Retinopathy using Deep Learning techniques
 
-by [Hardik Srivastava](https://scholar.google.com/citations?hl=en&user=H-BQ2gcAAAAJ) and Dr. T. Rajalakshmi<br>You can find the paper [here](http://www.xtao.website/projects/srndeblur/srndeblur_cvpr18.pdf)
+by [Hardik Srivastava](https://scholar.google.com/citations?hl=en&user=H-BQ2gcAAAAJ) and Dr. T. Rajalakshmi<br>You can find the paper [here]()
 
 ## Prerequisites
 
