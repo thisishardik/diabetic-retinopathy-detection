@@ -143,7 +143,7 @@ def get_model(model):
 
 
 train_df, test_df = train_test_split(
-    image_df, train_size=0.9, shuffle=True, random_state=1)
+    image_df, train_size=0.8, shuffle=True, random_state=1)
 
 train_generator, test_generator, train_images, val_images, test_images = create_gen()
 print('\n')
